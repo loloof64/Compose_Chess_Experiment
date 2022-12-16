@@ -31,21 +31,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 
 @Composable
-fun ChessBoard(
-    modifier: Modifier = Modifier,
-) {
+fun ChessBoard() {
     val bgColor = Color(0xFF9999FF)
-    BoxWithConstraints(modifier = modifier
-        .background(bgColor)
-        .aspectRatio(1f)) {
+    BoxWithConstraints {
+        val heightBasedAspectRatio = maxHeight > maxWidth
         val minAvailableSide = if (maxWidth < maxHeight) maxWidth else maxHeight
         val cellSize = minAvailableSide * 0.11f
 
-        Column {
+        Column(modifier = Modifier
+            .aspectRatio(1f, heightBasedAspectRatio)
+            .background(bgColor)
+        ) {
             ChessBoardHorizontalLabels(cellSize = cellSize, whiteTurn = null)
             (0..7).forEach {
                 val row = 8-it
@@ -177,16 +178,17 @@ private fun ChessBoardCell(
     }
 }
 
-@Preview
+@Preview(device = Devices.DEFAULT)
+@Preview(device = Devices.TABLET)
 @Composable
 fun ChessBoardPreview() {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Yellow),
-        Arrangement.Center,
-        Alignment.CenterHorizontally
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ChessBoard(modifier = Modifier.fillMaxSize())
+        ChessBoard()
     }
 }
