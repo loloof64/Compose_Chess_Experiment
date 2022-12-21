@@ -16,14 +16,15 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
  */
-package com.loloof64.compose_chess_experiment.ui.components
+package com.loloof64.compose_chess_experiment.ui.components.chess_board
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,9 +35,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.sp
 
 @Composable
-fun ChessBoard() {
+fun ChessBoard(
+    position: String = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+) {
+    val positionParts = position.split(' ')
+    val isWhiteTurn = positionParts[1] == "w"
     val bgColor = Color(0xFF9999FF)
     BoxWithConstraints {
         val heightBasedAspectRatio = maxHeight > maxWidth
@@ -54,7 +60,7 @@ fun ChessBoard() {
                 val firstIsWhite = it % 2 == 0
                 ChessBoardCellsLine(cellSize = cellSize, firstCellWhite = firstIsWhite, rowLabel = rowLabel)
             }
-            ChessBoardHorizontalLabels(cellSize = cellSize, whiteTurn = null)
+            ChessBoardHorizontalLabels(cellSize = cellSize, whiteTurn = isWhiteTurn)
         }
     }
 }
@@ -189,6 +195,13 @@ fun ChessBoardPreview() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ChessBoard()
+        Button(onClick = {
+            /* TODO */
+        }) {
+            Text(text = "New game", fontSize = 25.sp)
+        }
+        ChessBoard(
+            position = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        )
     }
 }

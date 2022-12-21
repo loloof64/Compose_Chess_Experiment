@@ -3,6 +3,11 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+plugins {
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
+}
+
 android {
     namespace 'com.loloof64.compose_chess_experiment'
     compileSdk 33
@@ -60,4 +65,14 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
     implementation 'com.github.bhlangonijr:chesslib:1.3.3'
+}
+
+dependencies {
+    implementation "com.google.dagger:hilt-android:2.44"
+    kapt "com.google.dagger:hilt-compiler:2.44"
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes true
 }
