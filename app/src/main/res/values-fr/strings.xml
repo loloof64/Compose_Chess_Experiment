@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Compose Chess Experiment</string>
+    <string name="game_page">Page de jeu</string>
+    <string name="chess_piece">Pièce d\'échecs</string>
+    <string name="chess_position_error">Position erronée !</string>
+</resources>

@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Compose Chess Experiment</string>
+    <string name="game_page">Game page</string>
+    <string name="chess_piece">Chess piece</string>
+    <string name="chess_position_error">Wrong position !</string>
 </resources>
