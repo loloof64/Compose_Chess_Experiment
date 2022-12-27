@@ -22,10 +22,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.loloof64.compose_chess_experiment.R
@@ -37,10 +40,21 @@ import com.loloof64.compose_chess_experiment.utils.Response
 fun GameScreen(
     viewModel: ChessGameViewModel = viewModel()
 ) {
+    var reversed by rememberSaveable {
+        mutableStateOf(false)
+    }
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(id = R.string.game_page)) }
+                title = { Text(stringResource(id = R.string.game_page)) },
+                actions = {
+                    IconButton(onClick = { reversed = !reversed }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.swap_vert),
+                            contentDescription = stringResource(id = R.string.toggle_board_side),
+                        )
+                    }
+                }
             )
         }
     ) {
@@ -50,13 +64,16 @@ fun GameScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Button(onClick = {
-                viewModel.newGame()
+                viewModel.newGame("rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2")
             }) {
                 Text(text = "New game")
             }
             when (val state = viewModel.uiState.collectAsState().value) {
                 is Response.Success -> {
-                    ChessBoard(position = state.data.currentPosition)
+                    ChessBoard(
+                        position = state.data.currentPosition,
+                        reversed = reversed
+                    )
                 }
                 else -> {
                     Column(

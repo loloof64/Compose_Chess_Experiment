@@ -3,4 +3,5 @@
     <string name="game_page">Game page</string>
     <string name="chess_piece">Chess piece</string>
     <string name="chess_position_error">Wrong position !</string>
+    <string name="toggle_board_side">Toggle board side</string>
 </resources>

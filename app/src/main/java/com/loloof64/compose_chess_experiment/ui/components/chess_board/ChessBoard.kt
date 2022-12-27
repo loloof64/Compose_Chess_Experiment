@@ -46,7 +46,8 @@ const val emptyCell = ' '
 
 @Composable
 fun ChessBoard(
-    position: String = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    position: String = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    reversed: Boolean = false,
 ) {
     val positionParts = position.split(' ')
     val lineParts = positionParts[0].split('/')
@@ -62,17 +63,19 @@ fun ChessBoard(
                 .aspectRatio(1f, heightBasedAspectRatio)
                 .background(bgColor)
         ) {
-            ChessBoardHorizontalLabels(cellSize = cellSize, whiteTurn = null)
+            ChessBoardHorizontalLabels(cellSize = cellSize, whiteTurn = null, reversed = reversed)
             (0..7).forEach {
-                val row = 8 - it
+                val row = if (reversed) it + 1 else 8 - it
                 val rowLabel = "${Char('0'.code + row)}"
                 val firstIsWhite = it % 2 == 0
+                val piecesValues = lineParts[if (reversed) 7-it else it]
                 ChessBoardCellsLine(
                     cellSize = cellSize, firstCellWhite = firstIsWhite,
-                    rowLabel = rowLabel, piecesValues = lineParts[it]
+                    rowLabel = rowLabel, piecesValues = piecesValues,
+                    reversed = reversed
                 )
             }
-            ChessBoardHorizontalLabels(cellSize = cellSize, whiteTurn = isWhiteTurn)
+            ChessBoardHorizontalLabels(cellSize = cellSize, whiteTurn = isWhiteTurn, reversed = reversed)
         }
     }
 }
@@ -84,6 +87,7 @@ private fun ChessBoardCellsLine(
     firstCellWhite: Boolean,
     rowLabel: String,
     piecesValues: String,
+    reversed: Boolean,
 ) {
     val pieces = piecesValues.flatMap { value ->
         if (value.isDigit()) {
@@ -100,7 +104,8 @@ private fun ChessBoardCellsLine(
         (0..7).forEach {
             ChessBoardCell(
                 isWhite = if ((it % 2) == 0) firstCellWhite else !firstCellWhite,
-                size = cellSize, pieceValue = pieces[it]
+                size = cellSize,
+                pieceValue = pieces[if (reversed) 7 - it else it]
             )
         }
         ChessBoardVerticalLabel(text = rowLabel, cellSize = cellSize)
@@ -132,7 +137,8 @@ private fun ChessBoardVerticalLabel(
 private fun ChessBoardHorizontalLabels(
     modifier: Modifier = Modifier,
     cellSize: Dp,
-    whiteTurn: Boolean?
+    whiteTurn: Boolean?,
+    reversed: Boolean
 ) {
     val fontSize = with(LocalDensity.current) {
         (cellSize * 0.3f).toSp()
@@ -155,7 +161,7 @@ private fun ChessBoardHorizontalLabels(
             )
         }
         (0..7).forEach {
-            val col = it
+            val col = if (reversed) 7-it else it
             val colLabel = "${Char('A'.code + col)}"
             Row(
                 modifier = Modifier
